@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html>
+{% load  staticfiles %}
+<head>
+<title>lcv-search 搜索引擎</title>
+<!-- Custom Theme files -->
+<link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css" media="all"/>
+<!-- Custom Theme files -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<meta name="keywords" content="Flat Search Box Responsive, Login form web template, Sign up Web Templates, Flat Web Templates, Login signup Responsive web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+<!--Google Fonts-->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+<!--Google Fonts-->
+</head>
+<body>
+<!--search start here-->
+<div class="search">
+	<i> </i>
+	<div class="s-bar">
+	   <form>
+		<input type="text" class = "searchInput" >
+        <input type="submit"  value="Search" onclick="add_search()"/>
+        <ul class="dataList">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+	  </form>
+	</div>
+	<p>Popular searches: <a href="#">Modern PSD template,</a> <a href="#"> Portfolio design </a></p>
+</div>
+<script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/global.js' %}"></script>
+<script type="text/javascript">
+    var suggest_url = "{% url 'name' %}"
+    var search_url = "/search/"
+	$('.searchList').on('click', '.searchItem', function(){
+		$('.searchList .searchItem').removeClass('current');
+		$(this).addClass('current');
+	});
+    function removeByValue(arr, val) {
+      for(var i=0; i<arr.length; i++) {
+        if(arr[i] == val) {
+          arr.splice(i, 1);
+          break;
+        }
+      }
+    }
+    // 搜索建议
+    $(function(){
+        $('.searchInput').bind(' input propertychange ',function(){
+            var searchText = $(this).val();
+            var tmpHtml = ""
+            $.ajax({
+                cache: false,
+                type: 'get',
+                dataType:'json',
+                url:suggest_url+"?s="+searchText,
+                async: true,
+                success: function(data) {
+                    for (var i=0;i<data.length;i++){
+                        tmpHtml += '<li><a href="'+search_url+'?q='+data[i]+'">'+data[i]+'</a></li>'
+                    }
+                    $(".dataList").html("")
+                    $(".dataList").append(tmpHtml);
+                    if (data.length == 0){
+                        $('.dataList').hide()
+                    }else {
+                        $('.dataList').show()
+                    }
+                }
+            });
+        } );
+    })
+    hideElement($('.dataList'), $('.searchInput'));
+</script>
+<script>
+    var searchArr;
+    //定义一个search的，判断浏览器有无数据存储（搜索历史）
+    if(localStorage.search){
+    //如果有，转换成 数组的形式存放到searchArr的数组里（localStorage以字符串的形式存储，所以要把它转换成数组的形式）
+        searchArr= localStorage.search.split(",")
+    }else{
+    //如果没有，则定义searchArr为一个空的数组
+        searchArr = [];
+    }
+    //把存储的数据显示出来作为搜索历史
+    MapSearchArr();
+    function add_search(){
+        var val = $(".searchInput").val();
+        if (val.length>=2){
+            //点击搜索按钮时，去重
+            KillRepeat(val);
+            //去重后把数组存储到浏览器localStorage
+            localStorage.search = searchArr;
+            //然后再把搜索内容显示出来
+            MapSearchArr();
+        }
+        window.location.href=search_url+'?q='+val+"&s_type="+$(".searchItem.current").attr('data-type')
+    }
+    function MapSearchArr(){
+        var tmpHtml = "";
+        var arrLen = 0
+        if (searchArr.length >= 5){
+            arrLen = 5
+        }else {
+            arrLen = searchArr.length
+        }
+        for (var i=0;i<arrLen;i++){
+            tmpHtml += '<a href="'+search_url+'?q='+searchArr[i]+'">'+searchArr[i]+'</a>'
+        }
+        $(".mysearch .all-search").html(tmpHtml);
+    }
+    //去重
+    function KillRepeat(val){
+        var kill = 0;
+        for (var i=0;i<searchArr.length;i++){
+            if(val===searchArr[i]){
+                kill ++;
+            }
+        }
+        if(kill<1){
+            searchArr.unshift(val);
+        }else {
+            removeByValue(searchArr, val)
+            searchArr.unshift(val)
+        }
+    }
+</script>
+</body>
+</html>
