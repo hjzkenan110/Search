@@ -279,6 +279,6 @@ body {
 }
 /*--meadia quiries end here--*/
 /*联想下拉区域*/
-.s-bar .dataList{margin:0;width:20%;display:none;border-radius: 5px 0px 0px 5px;position: relative;left:0;top:17%;*top:43px;width:400px;padding:5px 0;background:#fff;border:1px solid #bfbfbf;border-top:none;opacity:0.6;}
+.s-bar .dataList{margin:0;width:20%;display:none;border-radius: 5px 0px 0px 5px;left:0;top:17%;*top:43px;width:400px;padding:5px 0;background:#fff;border:1px solid #bfbfbf;border-top:none;opacity:0.6;}
 .s-bar .dataList li{margin:0;padding:2px 15px;font-size:14px;opacity:0.6;border-radius: 5px 0px 0px 5px;}
 .s-bar .dataList li:hover{margin:0;background:#f0f0f0;color:#0080cc;font-weight:bold;opacity:0.0.6;border-radius: 5px 0px 0px 5px;}
